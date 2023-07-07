@@ -1,18 +1,12 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as http from 'http';
+import 'dotenv/config';
+import { httpServer } from './httpServer';
+import { createWsServer } from './wsServer';
+import { config } from './config';
 
-export const httpServer = http.createServer(function (req, res) {
-  const __dirname = path.resolve(path.dirname(''));
-  const file_path =
-    __dirname + (req.url === '/' ? '/front/index.html' : '/front' + req.url);
-  fs.readFile(file_path, function (err, data) {
-    if (err) {
-      res.writeHead(404);
-      res.end(JSON.stringify(err));
-      return;
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
+const { PORT_HTTP, PORT_WS } = config();
+
+httpServer.listen(PORT_HTTP, () => {
+  console.log(`✨ Frontend server is running on port ${PORT_HTTP}`);
 });
+
+createWsServer(PORT_WS);
