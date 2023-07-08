@@ -5,5 +5,5 @@ interface User {
 }
 
 interface IAppDb {
-  getUser: (id: number) => Promise<User | undefined>;
+  getUser: (username: string) => Promise<User | undefined>;
 }

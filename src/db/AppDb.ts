@@ -1,8 +1,8 @@
 class AppDb implements IAppDb {
   private users: User[] = [];
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.find((user) => user.index === id);
+  async getUser(username: string): Promise<User | undefined> {
+    return this.users.find((user) => user.name === username);
   }
 
   async addUser(newUser: User) {

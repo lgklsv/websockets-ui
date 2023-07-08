@@ -1,25 +1,19 @@
 type AvailableMesTypes = 'reg';
 
-interface ResRegData {
+interface ResReqBase {
+  type: AvailableMesTypes;
+  data: string;
+  id: 0;
+}
+
+interface ResponseReg {
   name: string;
   index: number;
   error: boolean;
   errorText: string;
 }
 
-interface ReqRegData {
+interface RequestReg {
   name: string;
   password: string;
-}
-
-interface ResponseObj {
-  type: AvailableMesTypes;
-  data: Object | ResRegData;
-  id: 0;
-}
-
-interface RequestObj {
-  type: AvailableMesTypes;
-  data: Object | ReqRegData;
-  id: 0;
 }
