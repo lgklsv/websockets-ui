@@ -1,5 +1,5 @@
 import { MES_TYPES } from '../const';
-import { registerUser } from './registerUser';
+import { registerUser } from './register';
 
 export const handler = async (
   message: string,
