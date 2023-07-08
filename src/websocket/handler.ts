@@ -1,10 +1,16 @@
-export const handler = async (message: string): Promise<string> => {
+import { MES_TYPES } from '../const';
+// import { registerUser } from './registerUser';
+
+export const handler = async (
+  message: string,
+  connectionId: number
+): Promise<string> => {
   try {
-    const jsonMessage = JSON.parse(message);
+    const reqObj = JSON.parse(message) as RequestObj;
     let response = message;
-    switch (jsonMessage.type) {
-      case 'reg':
-        response = jsonMessage;
+    switch (reqObj.type) {
+      case MES_TYPES.REG:
+        // response = await registerUser(reqObj, connectionId);
         break;
       default:
         // TODO handle error when type does not exist

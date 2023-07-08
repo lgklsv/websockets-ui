@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import { handler } from './websocket/handler';
 import { IncomingMessage } from 'http';
+import { generateId } from './utils';
 
 export const createWsServer = (
   port: number
@@ -13,15 +14,15 @@ export const createWsServer = (
 
   wsServer.on('connection', (ws) => {
     console.log('New client connected');
+    const connectionId = generateId();
+    console.log(connectionId);
     ws.on('message', async (msg) => {
       const stringData = msg.toString('utf8');
 
-      const res = await handler(stringData);
+      const res = await handler(stringData, connectionId);
       console.log(res);
       ws.send(res);
     });
-
-    ws.send('Hello this is welcome message');
   });
   return wsServer;
 };
