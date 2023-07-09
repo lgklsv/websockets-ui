@@ -1,5 +1,6 @@
 import { db } from '../../db/AppDb';
 import { generateId } from '../../utils';
+import { ResReqBase } from '../types';
 import { updateRoom } from './updateRoom';
 
 export const createRoom = async (connectionId: number): Promise<ResReqBase> => {

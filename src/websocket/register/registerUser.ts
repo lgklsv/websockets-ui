@@ -1,5 +1,6 @@
 import { db } from '../../db/AppDb';
 import { AppError } from '../../errors/AppError';
+import { RequestReg, ResReqBase } from '../types';
 import { validateUserData } from './validateUserData';
 
 export const registerUser = async (

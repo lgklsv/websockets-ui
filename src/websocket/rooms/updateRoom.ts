@@ -1,5 +1,6 @@
 import { MES_TYPES } from '../../const';
 import { db } from '../../db/AppDb';
+import { ResReqBase } from '../types';
 
 export const updateRoom = async (): Promise<ResReqBase> => {
   const rooms = await db.getRooms();

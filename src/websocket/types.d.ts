@@ -1,19 +1,21 @@
-type AvailableMesTypes = 'reg' | 'create_room' | 'error' | 'update_room';
+import { MES_TYPES } from '../const';
 
-interface ResReqBase {
+export type AvailableMesTypes = `${MES_TYPES}`;
+
+export interface ResReqBase {
   type: AvailableMesTypes;
   data: string;
   id: 0;
 }
 
-interface ResponseReg {
+export interface ResponseReg {
   name: string;
   index: number;
   error: boolean;
   errorText: string;
 }
 
-interface RequestReg {
+export interface RequestReg {
   name: string;
   password: string;
 }

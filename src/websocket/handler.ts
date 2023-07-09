@@ -1,6 +1,7 @@
 import { MES_TYPES } from '../const';
 import { registerUser } from './register';
 import { createRoom } from './rooms';
+import { ResReqBase } from './types';
 
 export const handler = async (
   message: string,
