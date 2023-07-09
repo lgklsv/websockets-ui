@@ -14,7 +14,12 @@ class AppDb implements IAppDb {
     this.users.push(newUser);
   }
 
-  async getRooms(): Promise<Room[]> {
+  async getRoomById(index: number): Promise<Room | undefined> {
+    return this.rooms.find((room) => room.roomId === index);
+  }
+
+  async updateRooms(): Promise<Room[]> {
+    this.rooms = this.rooms.filter((room) => room.roomUsers.length < 2);
     return this.rooms;
   }
 
@@ -25,7 +30,13 @@ class AppDb implements IAppDb {
     });
   }
 
-  async addUserToRoom(indexRoom: number, user: User): Promise<void> {
+  async addUserToRoom(
+    indexRoom: number,
+    user: User
+  ): Promise<{ user1: Player | undefined; user2: Player | undefined }> {
+    let user1: Player | undefined;
+    let user2: Player | undefined;
+
     const roomIdx = this.rooms.findIndex((room) => room.roomId === indexRoom);
     const room = this.rooms[roomIdx];
     const userInRoom = room.roomUsers.find(
@@ -37,7 +48,10 @@ class AppDb implements IAppDb {
         name: user.name,
         index: user.index,
       });
+      user1 = room.roomUsers[0];
+      user2 = user;
     }
+    return { user1, user2 };
   }
 }
 

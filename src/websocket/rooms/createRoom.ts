@@ -1,16 +1,12 @@
 import { db } from '../../db/AppDb';
 import { generateId } from '../../utils';
-import { ResReqBase } from '../types';
-import { updateRoom } from './updateRoom';
 
 export const createRoomHandler = async (
   connectionId: number
-): Promise<ResReqBase> => {
+): Promise<void> => {
   const newRoomId = generateId();
   const user = await db.getUserById(connectionId);
   if (user) {
     await db.createRoom(newRoomId, user);
   }
-
-  return await updateRoom();
 };

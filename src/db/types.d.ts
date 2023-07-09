@@ -4,15 +4,21 @@ interface User {
   password: string;
 }
 
+type Player = Omit<User, 'password'>;
+
 interface IAppDb {
   getUser: (username: string) => Promise<User | undefined>;
   getUserById: (index: number) => Promise<User | undefined>;
-  getRooms: () => Promise<Room[]>;
+  updateRooms: () => Promise<Room[]>;
+  getRoomById: (index: number) => Promise<Room | undefined>;
   createRoom: (indexRoom: number, user: User) => Promise<void>;
-  addUserToRoom: (indexRoom: number, user: User) => Promise<void>;
+  addUserToRoom: (
+    indexRoom: number,
+    user: User
+  ) => Promise<{ user1: Player | undefined; user2: Player | undefined }>;
 }
 
 interface Room {
   roomId: number;
-  roomUsers: Omit<User, 'password'>[];
+  roomUsers: Player[];
 }

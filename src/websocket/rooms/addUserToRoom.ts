@@ -1,6 +1,6 @@
+import { MES_TYPES } from '../../const';
 import { db } from '../../db/AppDb';
 import { ResReqBase } from '../types';
-import { updateRoom } from './updateRoom';
 
 export const addUserToRoomHandler = async (
   reqBody: ResReqBase,
@@ -10,10 +10,18 @@ export const addUserToRoomHandler = async (
 
   const user = await db.getUserById(connectionId);
   if (user) {
-    await db.addUserToRoom(indexRoom, user);
+    const { user1, user2 } = await db.addUserToRoom(indexRoom, user);
+    console.log(user1, user2);
+
+    if (user1 && user2) {
+      return {
+        type: MES_TYPES.CREATE_GAME,
+        data: JSON.stringify({
+          idGame: user1.index,
+          idPlayer: user2.index,
+        }),
+        id: 0,
+      };
+    }
   }
-
-  // TODO: Create and Start game
-
-  return await updateRoom();
 };
