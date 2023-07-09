@@ -24,6 +24,21 @@ class AppDb implements IAppDb {
       roomUsers: [{ name: user.name, index: user.index }],
     });
   }
+
+  async addUserToRoom(indexRoom: number, user: User): Promise<void> {
+    const roomIdx = this.rooms.findIndex((room) => room.roomId === indexRoom);
+    const room = this.rooms[roomIdx];
+    const userInRoom = room.roomUsers.find(
+      (roomUser) => roomUser.index === user.index
+    );
+
+    if (!userInRoom && room.roomUsers.length < 2) {
+      this.rooms[roomIdx].roomUsers.push({
+        name: user.name,
+        index: user.index,
+      });
+    }
+  }
 }
 
 export const db = new AppDb();

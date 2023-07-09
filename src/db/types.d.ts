@@ -9,6 +9,7 @@ interface IAppDb {
   getUserById: (index: number) => Promise<User | undefined>;
   getRooms: () => Promise<Room[]>;
   createRoom: (indexRoom: number, user: User) => Promise<void>;
+  addUserToRoom: (indexRoom: number, user: User) => Promise<void>;
 }
 
 interface Room {

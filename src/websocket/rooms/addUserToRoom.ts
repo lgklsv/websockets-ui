@@ -1,16 +1,19 @@
 import { db } from '../../db/AppDb';
-import { generateId } from '../../utils';
 import { ResReqBase } from '../types';
 import { updateRoom } from './updateRoom';
 
-export const createRoomHandler = async (
+export const addUserToRoomHandler = async (
+  reqBody: ResReqBase,
   connectionId: number
 ): Promise<ResReqBase> => {
-  const newRoomId = generateId();
+  const { indexRoom } = JSON.parse(reqBody.data) as RequestAdd;
+
   const user = await db.getUserById(connectionId);
   if (user) {
-    await db.createRoom(newRoomId, user);
+    await db.addUserToRoom(indexRoom, user);
   }
+
+  // TODO: Create and Start game
 
   return await updateRoom();
 };

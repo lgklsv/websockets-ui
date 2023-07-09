@@ -1,9 +1,9 @@
 import { db } from '../../db/AppDb';
 import { AppError } from '../../errors/AppError';
-import { RequestReg, ResReqBase } from '../types';
+import { ResReqBase } from '../types';
 import { validateUserData } from './validateUserData';
 
-export const registerUser = async (
+export const registerUserHandler = async (
   reqBody: ResReqBase,
   connectionId: number
 ): Promise<ResReqBase> => {
@@ -12,7 +12,7 @@ export const registerUser = async (
   try {
     await validateUserData(name, password);
 
-    db.addUser({ name, password, index: connectionId });
+    await db.addUser({ name, password, index: connectionId });
 
     return {
       ...reqBody,

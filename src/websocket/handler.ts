@@ -1,6 +1,6 @@
 import { MES_TYPES } from '../const';
-import { registerUser } from './register';
-import { createRoom } from './rooms';
+import { registerUserHandler } from './register';
+import { createRoomHandler, addUserToRoomHandler } from './rooms';
 import { ResReqBase } from './types';
 
 export const handler = async (
@@ -14,10 +14,13 @@ export const handler = async (
 
     switch (reqObj.type) {
       case MES_TYPES.REG:
-        response = await registerUser(reqObj, connectionId);
+        response = await registerUserHandler(reqObj, connectionId);
         break;
       case MES_TYPES.CREATE_ROOM:
-        response = await createRoom(connectionId);
+        response = await createRoomHandler(connectionId);
+        break;
+      case MES_TYPES.ADD_TO_ROOM:
+        response = await addUserToRoomHandler(reqObj, connectionId);
         break;
       default:
       // TODO handle error when type does not exist
