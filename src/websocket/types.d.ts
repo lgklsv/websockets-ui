@@ -1,4 +1,4 @@
-type AvailableMesTypes = 'reg';
+type AvailableMesTypes = 'reg' | 'create_room' | 'error' | 'update_room';
 
 interface ResReqBase {
   type: AvailableMesTypes;

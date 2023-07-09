@@ -1,26 +1,33 @@
 import { MES_TYPES } from '../const';
 import { registerUser } from './register';
+import { createRoom } from './rooms';
 
 export const handler = async (
   message: string,
   connectionId: number
-): Promise<string> => {
-  let response = message;
+): Promise<ResReqBase> => {
+  let response: ResReqBase;
 
   try {
     const reqObj = JSON.parse(message) as ResReqBase;
 
     switch (reqObj.type) {
       case MES_TYPES.REG:
-        const regRes = await registerUser(reqObj, connectionId);
-        response = JSON.stringify(regRes);
+        response = await registerUser(reqObj, connectionId);
+        break;
+      case MES_TYPES.CREATE_ROOM:
+        response = await createRoom(connectionId);
         break;
       default:
-        // TODO handle error when type does not exist
-        return message;
+      // TODO handle error when type does not exist
+      // return message;
     }
   } catch (error) {
-    response = JSON.stringify({ error: 'Internal server error' });
+    response = {
+      type: MES_TYPES.ERROR,
+      data: JSON.stringify({ error: true, errorText: 'Internal server error' }),
+      id: 0,
+    };
   } finally {
     return response;
   }
