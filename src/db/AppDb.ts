@@ -1,8 +1,11 @@
+import { generateId } from '../utils';
+
 class AppDb implements IAppDb {
   private users: User[] = [];
   private rooms: Room[] = [];
-  // private games: Game[] = [];
+  private games: Game[] = [];
 
+  // Users
   async getUser(username: string): Promise<User | undefined> {
     return this.users.find((user) => user.name === username);
   }
@@ -19,6 +22,7 @@ class AppDb implements IAppDb {
     return this.rooms.find((room) => room.roomId === index);
   }
 
+  // Rooms
   async updateRooms(): Promise<Room[]> {
     this.rooms = this.rooms.filter((room) => room.roomUsers.length < 2);
     return this.rooms;
@@ -53,6 +57,21 @@ class AppDb implements IAppDb {
       user2 = user;
     }
     return { user1, user2 };
+  }
+
+  // Games
+  async createGame(players: Player[]): Promise<number> {
+    const gameId = generateId();
+
+    this.games.push({
+      gameId,
+      active: true,
+      turn: players[0].index,
+      shipsReady: false,
+      players: [{ index: players[0].index, field: [] }],
+    });
+
+    return gameId;
   }
 }
 

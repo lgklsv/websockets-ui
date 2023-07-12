@@ -21,14 +21,18 @@ interface Ship {
   type: 'small' | 'medium' | 'large' | 'huge';
 }
 
-// interface Game {
-//   finished: boolean;
-//   turn: number;
-//   gameId: number;
-//   sentShipsCounter: 0 | 1 | 2;
-//   players: { index: number; field: Field }[];
-//   hittedFields: { x: number; y: number }[];
-// }
+type Field = {
+  killed: boolean;
+  positions: { x: number; y: number; status: boolean }[];
+}[];
+
+interface Game {
+  gameId: number;
+  active: boolean;
+  turn: number;
+  shipsReady: boolean;
+  players: { index: number; field: Field }[];
+}
 
 interface IAppDb {
   getUser: (username: string) => Promise<User | undefined>;
@@ -40,4 +44,5 @@ interface IAppDb {
     indexRoom: number,
     user: User
   ) => Promise<{ user1: Player | undefined; user2: Player | undefined }>;
+  createGame: (players: Player[]) => Promise<number>;
 }

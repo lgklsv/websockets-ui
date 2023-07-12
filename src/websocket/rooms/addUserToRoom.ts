@@ -1,6 +1,6 @@
 import { db } from '../../db/AppDb';
 import { createGame } from '../game';
-import { ResReqBase, WebSocketServer, WebSocketWithId } from '../types';
+import { ResReqBase, WebSocketServer } from '../types';
 
 export const addUserToRoomHandler = async (
   wsServer: WebSocketServer,
@@ -14,7 +14,7 @@ export const addUserToRoomHandler = async (
     const { user1, user2 } = await db.addUserToRoom(indexRoom, user);
 
     if (user1 && user2) {
-      createGame(wsServer, [user1, user2]);
+      await createGame(wsServer, [user1, user2]);
     }
   }
 };
