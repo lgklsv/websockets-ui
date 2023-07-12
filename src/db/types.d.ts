@@ -30,8 +30,8 @@ interface Game {
   gameId: number;
   active: boolean;
   turn: number;
-  shipsReady: boolean;
-  players: { index: number; field: Field }[];
+  readyStage: 'init' | 'one_ready' | 'both_ready';
+  players: { index: number; ships: Ship[] }[];
 }
 
 interface IAppDb {
@@ -45,4 +45,6 @@ interface IAppDb {
     user: User
   ) => Promise<{ user1: Player | undefined; user2: Player | undefined }>;
   createGame: (players: Player[]) => Promise<number>;
+  getGameById: (gameId: number) => Promise<Game | undefined>;
+  updateGameById: (gameId: number, updatedGame: Game) => Promise<void>;
 }

@@ -2,7 +2,8 @@ import { ERROR_MES, MES_TYPES } from '../const';
 import { registerUserHandler } from './register';
 import { createRoomHandler, addUserToRoomHandler } from './rooms';
 import { ResReqBase, WebSocketServer } from './types';
-import { updateRoomsHandler } from './rooms/updateRooms';
+import { updateRoomsHandler } from './rooms';
+import { addShipsToGameHandler } from './game';
 
 export const handler = async (
   wsServer: WebSocketServer,
@@ -25,6 +26,9 @@ export const handler = async (
       case MES_TYPES.ADD_TO_ROOM:
         await addUserToRoomHandler(wsServer, reqObj, connectionId);
         await updateRoomsHandler(wsServer);
+        break;
+      case MES_TYPES.ADD_SHIPS:
+        await addShipsToGameHandler(wsServer, reqObj);
         break;
       default:
         return response;

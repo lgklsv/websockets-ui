@@ -1,4 +1,4 @@
-import { generateId } from '../utils';
+import { generateId, pickFirstPlayer } from '../utils';
 
 class AppDb implements IAppDb {
   private users: User[] = [];
@@ -62,16 +62,31 @@ class AppDb implements IAppDb {
   // Games
   async createGame(players: Player[]): Promise<number> {
     const gameId = generateId();
+    const firstPlayer = pickFirstPlayer(players);
 
     this.games.push({
       gameId,
       active: true,
-      turn: players[0].index,
-      shipsReady: false,
-      players: [{ index: players[0].index, field: [] }],
+      turn: firstPlayer.index,
+      readyStage: 'init',
+      players: [
+        { index: players[0].index, ships: [] },
+        { index: players[1].index, ships: [] },
+      ],
     });
 
     return gameId;
+  }
+
+  async getGameById(gameId: number): Promise<Game | undefined> {
+    return this.games.find((game) => game.gameId === gameId);
+  }
+
+  async updateGameById(gameId: number, updatedGame: Game): Promise<void> {
+    const gameIdx = this.games.findIndex((game) => game.gameId === gameId);
+    if (gameIdx === -1) return undefined;
+
+    this.games[gameIdx] = updatedGame;
   }
 }
 
