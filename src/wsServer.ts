@@ -2,6 +2,8 @@ import WebSocket from 'ws';
 import { handler } from './websocket/handler';
 import { IncomingMessage } from 'http';
 import { generateId } from './utils';
+import { WebSocketWithId } from './websocket/types';
+import { updateRoomsHandler } from './websocket/rooms';
 
 export const createWsServer = (
   port: number
@@ -12,10 +14,13 @@ export const createWsServer = (
     console.log(`🚀 WS server is running on port ${port}`);
   });
 
-  wsServer.on('connection', (ws) => {
-    console.log('New client connected');
+  wsServer.on('connection', (ws: WebSocketWithId) => {
     const connectionId = generateId();
-    console.log(connectionId);
+    ws.id = connectionId;
+    console.log(
+      `🆕 Client with ID ${connectionId} connected to websocket server`
+    );
+
     ws.on('message', async (msg) => {
       const stringData = msg.toString('utf8');
 
@@ -24,6 +29,14 @@ export const createWsServer = (
         ws.send(JSON.stringify(res));
       }
     });
+
+    ws.on('close', async () => {
+      // TODO clean up the connection
+      await updateRoomsHandler(wsServer);
+
+      console.log(`Client with ID ${ws.id} disconnected from websocket`);
+    });
   });
+
   return wsServer;
 };

@@ -25,7 +25,7 @@ export const handler = async (
         await updateRoomsHandler(wsServer);
         break;
       case MES_TYPES.ADD_TO_ROOM:
-        response = await addUserToRoomHandler(reqObj, connectionId);
+        await addUserToRoomHandler(wsServer, reqObj, connectionId);
         await updateRoomsHandler(wsServer);
         break;
       default:

@@ -1,4 +1,5 @@
 import { MES_TYPES } from '../const';
+import WebSocket from 'ws';
 
 export type AvailableMesTypes = `${MES_TYPES}`;
 
@@ -7,3 +8,5 @@ export interface ResReqBase {
   data: string;
   id: 0;
 }
+
+export type WebSocketWithId = WebSocket & { id: number };
