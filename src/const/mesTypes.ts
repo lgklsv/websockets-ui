@@ -5,4 +5,5 @@ export enum MES_TYPES {
   UPDATE_ROOM = 'update_room',
   ADD_TO_ROOM = 'add_user_to_room',
   CREATE_GAME = 'create_game',
+  ADD_SHIPS = 'add_ships',
 }

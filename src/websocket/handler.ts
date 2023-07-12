@@ -1,13 +1,11 @@
-import WebSocket from 'ws';
 import { ERROR_MES, MES_TYPES } from '../const';
 import { registerUserHandler } from './register';
 import { createRoomHandler, addUserToRoomHandler } from './rooms';
-import { ResReqBase } from './types';
-import { IncomingMessage } from 'http';
+import { ResReqBase, WebSocketServer } from './types';
 import { updateRoomsHandler } from './rooms/updateRooms';
 
 export const handler = async (
-  wsServer: WebSocket.Server<typeof WebSocket, typeof IncomingMessage>,
+  wsServer: WebSocketServer,
   message: string,
   connectionId: number
 ): Promise<ResReqBase | undefined> => {

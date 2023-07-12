@@ -1,13 +1,10 @@
 import WebSocket from 'ws';
 import { handler } from './websocket/handler';
-import { IncomingMessage } from 'http';
 import { generateId } from './utils';
-import { WebSocketWithId } from './websocket/types';
+import { WebSocketServer, WebSocketWithId } from './websocket/types';
 import { updateRoomsHandler } from './websocket/rooms';
 
-export const createWsServer = (
-  port: number
-): WebSocket.Server<typeof WebSocket, typeof IncomingMessage> => {
+export const createWsServer = (port: number): WebSocketServer => {
   const wsServer = new WebSocket.Server({ port });
 
   wsServer.on('listening', () => {

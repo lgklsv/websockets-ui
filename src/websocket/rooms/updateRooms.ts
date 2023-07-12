@@ -1,10 +1,9 @@
-import WebSocket from 'ws';
-import { IncomingMessage } from 'http';
 import { MES_TYPES } from '../../const';
 import { db } from '../../db/AppDb';
+import { WebSocketServer } from '../types';
 
 export const updateRoomsHandler = async (
-  wsServer: WebSocket.Server<typeof WebSocket, typeof IncomingMessage>
+  wsServer: WebSocketServer
 ): Promise<void> => {
   const rooms = await db.updateRooms();
 

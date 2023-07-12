@@ -1,3 +1,4 @@
+import { IncomingMessage } from 'http';
 import { MES_TYPES } from '../const';
 import WebSocket from 'ws';
 
@@ -10,3 +11,8 @@ export interface ResReqBase {
 }
 
 export type WebSocketWithId = WebSocket & { id: number };
+
+export type WebSocketServer = WebSocket.Server<
+  typeof WebSocket,
+  typeof IncomingMessage
+>;
