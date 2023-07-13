@@ -8,4 +8,5 @@ export enum MES_TYPES {
   ADD_SHIPS = 'add_ships',
   START_GAME = 'start_game',
   TURN = 'turn',
+  ATTACK = 'attack',
 }

@@ -1,4 +1,5 @@
 import { db } from '../../db/AppDb';
+import { populateGameField } from '../../utils';
 import { ResReqBase, WebSocketServer } from '../types';
 import { GAME_STAGES } from './readyGameStages';
 import { startGameHandler } from './startGame';
@@ -12,24 +13,36 @@ export const addShipsToGameHandler = async (
     reqBody.data
   ) as RequestAddShips;
 
+  console.log(ships);
+
   const game = await db.getGameById(gameId);
   if (!game) return;
 
-  if (game.readyStage === GAME_STAGES.INIT) {
-    const updatedPlayers = game.players.map((player) => {
-      if (player.index === indexPlayer) {
-        return { index: player.index, ships };
-      }
-      return player;
-    });
+  const updatedPlayers = game.players.map((player) => {
+    if (player.index === indexPlayer) {
+      return {
+        index: player.index,
+        gameField: populateGameField(player.gameField, ships),
+        ships,
+      };
+    }
+    return player;
+  });
 
+  console.log(updatedPlayers[0].gameField);
+
+  if (game.readyStage === GAME_STAGES.INIT) {
     await db.updateGameById(gameId, {
       ...game,
       players: updatedPlayers,
       readyStage: 'one_ready',
     });
   } else if (game.readyStage === GAME_STAGES.ONE_READY) {
-    await db.updateGameById(gameId, { ...game, readyStage: 'both_ready' });
+    await db.updateGameById(gameId, {
+      ...game,
+      players: updatedPlayers,
+      readyStage: 'both_ready',
+    });
     startGameHandler(wsServer, game);
     turnHandler(wsServer, game);
   }

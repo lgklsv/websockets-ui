@@ -1,4 +1,4 @@
-import { generateId, pickFirstPlayer } from '../utils';
+import { generateEmptyGameField, generateId, pickFirstPlayer } from '../utils';
 
 class AppDb implements IAppDb {
   private users: User[] = [];
@@ -70,8 +70,16 @@ class AppDb implements IAppDb {
       turn: firstPlayer.index,
       readyStage: 'init',
       players: [
-        { index: players[0].index, ships: [] },
-        { index: players[1].index, ships: [] },
+        {
+          index: players[0].index,
+          ships: [],
+          gameField: generateEmptyGameField(),
+        },
+        {
+          index: players[1].index,
+          ships: [],
+          gameField: generateEmptyGameField(),
+        },
       ],
     });
 

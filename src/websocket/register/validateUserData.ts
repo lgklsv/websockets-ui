@@ -11,7 +11,6 @@ export const validateUserData = async (name: string, password: string) => {
     throw new AppError('reg', ERROR_MES.INVALID_USERNAME);
   }
 
-  console.log(password);
   if (!/^[A-Za-z]\w{5,16}$/.test(password)) {
     throw new AppError('reg', ERROR_MES.INVALID_PASSWORD);
   }

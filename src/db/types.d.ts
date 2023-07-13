@@ -21,17 +21,19 @@ interface Ship {
   type: 'small' | 'medium' | 'large' | 'huge';
 }
 
-type Field = {
-  killed: boolean;
-  positions: { x: number; y: number; status: boolean }[];
-}[];
+type GameCell = {
+  x: number;
+  y: number;
+  status: 'init' | 'ship' | 'miss' | 'killed' | 'shot';
+  ship: Ship | undefined;
+};
 
 interface Game {
   gameId: number;
   active: boolean;
   turn: number;
   readyStage: 'init' | 'one_ready' | 'both_ready';
-  players: { index: number; ships: Ship[] }[];
+  players: { index: number; ships: Ship[]; gameField: GameCell[][] }[];
 }
 
 interface IAppDb {
