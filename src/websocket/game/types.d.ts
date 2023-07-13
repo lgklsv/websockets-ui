@@ -10,3 +10,5 @@ interface RequestAttack {
   y: number;
   indexPlayer: number;
 }
+
+type ResCellStatus = 'miss' | 'killed' | 'shot';

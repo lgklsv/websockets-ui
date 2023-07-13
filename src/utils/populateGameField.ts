@@ -6,8 +6,8 @@ export const populateGameField = (
     // Vertical
     if (ship.direction) {
       for (let i = 0; i < ship.length; i++) {
-        gameField[ship.position.y + i][ship.position.x] = {
-          ...gameField[ship.position.y + i][ship.position.x],
+        gameField[ship.position.x][ship.position.y + i] = {
+          ...gameField[ship.position.x][ship.position.y + i],
           status: 'ship',
           ship,
         };
@@ -16,8 +16,8 @@ export const populateGameField = (
     // Horizontal
     else {
       for (let i = 0; i < ship.length; i++) {
-        gameField[ship.position.y][ship.position.x + i] = {
-          ...gameField[ship.position.y][ship.position.x + i],
+        gameField[ship.position.x + i][ship.position.y] = {
+          ...gameField[ship.position.x + i][ship.position.y],
           status: 'ship',
           ship,
         };
