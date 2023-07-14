@@ -1,3 +1,4 @@
 export * from './createGame';
 export * from './addShipsToGame';
-export * from './attack';
+export * from './attackHandler';
+export * from './randomAttackHandler';

@@ -3,7 +3,11 @@ import { registerUserHandler } from './register';
 import { createRoomHandler, addUserToRoomHandler } from './rooms';
 import { ResReqBase, WebSocketServer } from './types';
 import { updateRoomsHandler } from './rooms';
-import { addShipsToGameHandler, attackHandler } from './game';
+import {
+  addShipsToGameHandler,
+  attackHandler,
+  randomAttackHandler,
+} from './game';
 
 export const handler = async (
   wsServer: WebSocketServer,
@@ -32,6 +36,9 @@ export const handler = async (
         break;
       case MES_TYPES.ATTACK:
         await attackHandler(wsServer, reqObj);
+        break;
+      case MES_TYPES.RANDOM_ATTACK:
+        await randomAttackHandler(wsServer, reqObj);
         break;
       default:
         return response;

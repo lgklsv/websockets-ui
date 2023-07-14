@@ -1,30 +1,27 @@
 import { MES_TYPES, SHIP_STATUS } from '../../const';
 import { db } from '../../db/AppDb';
-import { ResReqBase, WebSocketServer, WebSocketWithId } from '../types';
+import { WebSocketServer, WebSocketWithId } from '../types';
 import { isKilled } from './helpers';
 import { killShipHandler } from './killShip';
 import { turnHandler } from './turn';
 
-export const attackHandler = async (
+export const attack = async (
   wsServer: WebSocketServer,
-  reqBody: ResReqBase
+  gameId: number,
+  indexPlayer: number,
+  x: number,
+  y: number
 ) => {
-  const { gameId, x, y, indexPlayer } = JSON.parse(
-    reqBody.data
-  ) as RequestAttack;
-
   const game = await db.getGameById(gameId);
   if (!game) return;
 
   // Check if turn is on current player
   if (game.turn !== indexPlayer) return;
 
-  const opponentPlayer = game.players.find(
-    (player) => player.index !== indexPlayer
-  );
-  if (!opponentPlayer) return;
+  const opponentGameFiled = await db.getOpponentGameField(gameId, indexPlayer);
+  if (!opponentGameFiled) return;
 
-  const cell = opponentPlayer.gameField[x][y];
+  const cell = opponentGameFiled[x][y];
   let status: ResCellStatus = SHIP_STATUS.MISS;
 
   // Prevent hitting some field again
@@ -35,15 +32,15 @@ export const attackHandler = async (
   )
     return;
 
-  const curShip = opponentPlayer.gameField[x][y].ship;
+  const curShip = opponentGameFiled[x][y].ship;
   if (cell.status === 'init') {
-    opponentPlayer.gameField[x][y].status = SHIP_STATUS.MISS;
+    opponentGameFiled[x][y].status = SHIP_STATUS.MISS;
   } else if (cell.status === 'ship') {
-    opponentPlayer.gameField[x][y].status = SHIP_STATUS.SHOT;
+    opponentGameFiled[x][y].status = SHIP_STATUS.SHOT;
     status = SHIP_STATUS.SHOT;
 
     // Check if the ship is killed after the shot
-    if (isKilled(curShip, opponentPlayer.gameField)) {
+    if (isKilled(curShip, opponentGameFiled)) {
       console.log('killed');
 
       status = SHIP_STATUS.KILLED;
@@ -51,7 +48,7 @@ export const attackHandler = async (
         wsServer,
         game.players,
         indexPlayer,
-        opponentPlayer.gameField,
+        opponentGameFiled,
         curShip
       );
     }

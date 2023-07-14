@@ -110,6 +110,21 @@ class AppDb implements IAppDb {
 
     this.games[gameIdx].turn = nextTurnPlayer.index;
   }
+
+  async getOpponentGameField(
+    gameId: number,
+    curPlayerIdx: number
+  ): Promise<GameCell[][] | undefined> {
+    const game = await db.getGameById(gameId);
+    if (!game) return;
+
+    const opponentPlayer = game.players.find(
+      (player) => player.index !== curPlayerIdx
+    );
+    if (!opponentPlayer) return;
+
+    return opponentPlayer.gameField;
+  }
 }
 
 export const db = new AppDb();

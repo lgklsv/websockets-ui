@@ -56,4 +56,8 @@ interface IAppDb {
   getGameById: (gameId: number) => Promise<Game | undefined>;
   updateGameById: (gameId: number, updatedGame: Game) => Promise<void>;
   changeTurn: (gameId: number) => Promise<void>;
+  getOpponentGameField: (
+    gameId: number,
+    curPlayerIdx: number
+  ) => Promise<GameCell[][] | undefined>;
 }

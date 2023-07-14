@@ -11,4 +11,9 @@ interface RequestAttack {
   indexPlayer: number;
 }
 
+interface RequestRandomAttack {
+  gameId: number;
+  indexPlayer: number;
+}
+
 type ResCellStatus = 'miss' | 'killed' | 'shot';
