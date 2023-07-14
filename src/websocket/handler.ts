@@ -39,7 +39,7 @@ export const handler = async (
   } catch (error) {
     response = {
       type: MES_TYPES.ERROR,
-      data: JSON.stringify({ error: true, errorText: ERROR_MES.INTERNAL }),
+      data: JSON.stringify({ error: true, errorText: error.message }),
       id: 0,
     };
   } finally {
