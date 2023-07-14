@@ -3,6 +3,7 @@ import { db } from '../../db/AppDb';
 import { ResReqBase, WebSocketServer, WebSocketWithId } from '../types';
 import { isKilled } from './helpers';
 import { killShipHandler } from './killShip';
+import { turnHandler } from './turn';
 
 export const attackHandler = async (
   wsServer: WebSocketServer,
@@ -75,7 +76,9 @@ export const attackHandler = async (
       });
     });
   }
-
   // TODO Check if we have a winner
+
+  db.changeTurn(game.gameId);
+  turnHandler(wsServer, game);
   console.log(gameId, x, y, indexPlayer);
 };

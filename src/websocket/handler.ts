@@ -1,4 +1,4 @@
-import { ERROR_MES, MES_TYPES } from '../const';
+import { MES_TYPES } from '../const';
 import { registerUserHandler } from './register';
 import { createRoomHandler, addUserToRoomHandler } from './rooms';
 import { ResReqBase, WebSocketServer } from './types';

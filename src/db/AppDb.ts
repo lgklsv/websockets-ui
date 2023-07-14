@@ -97,6 +97,19 @@ class AppDb implements IAppDb {
 
     this.games[gameIdx] = updatedGame;
   }
+
+  async changeTurn(gameId: number): Promise<void> {
+    const gameIdx = this.games.findIndex((game) => game.gameId === gameId);
+    if (gameIdx === -1) return;
+
+    const prevTurn = this.games[gameIdx].turn;
+
+    const nextTurnPlayer = this.games[gameIdx].players.find(
+      (player) => player.index !== prevTurn
+    );
+
+    this.games[gameIdx].turn = nextTurnPlayer.index;
+  }
 }
 
 export const db = new AppDb();

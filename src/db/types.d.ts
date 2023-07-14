@@ -55,4 +55,5 @@ interface IAppDb {
   createGame: (players: Player[]) => Promise<number>;
   getGameById: (gameId: number) => Promise<Game | undefined>;
   updateGameById: (gameId: number, updatedGame: Game) => Promise<void>;
+  changeTurn: (gameId: number) => Promise<void>;
 }
