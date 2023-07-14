@@ -28,12 +28,18 @@ type GameCell = {
   ship: Ship | undefined;
 };
 
+type PlayersInGame = {
+  index: number;
+  ships: Ship[];
+  gameField: GameCell[][];
+}[];
+
 interface Game {
   gameId: number;
   active: boolean;
   turn: number;
   readyStage: 'init' | 'one_ready' | 'both_ready';
-  players: { index: number; ships: Ship[]; gameField: GameCell[][] }[];
+  players: PlayersInGame;
 }
 
 interface IAppDb {

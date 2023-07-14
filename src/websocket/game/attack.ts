@@ -2,6 +2,7 @@ import { MES_TYPES, SHIP_STATUS } from '../../const';
 import { db } from '../../db/AppDb';
 import { ResReqBase, WebSocketServer, WebSocketWithId } from '../types';
 import { isKilled } from './helpers';
+import { killShipHandler } from './killShip';
 
 export const attackHandler = async (
   wsServer: WebSocketServer,
@@ -30,6 +31,7 @@ export const attackHandler = async (
   )
     return;
 
+  const curShip = opponentPlayer.gameField[x][y].ship;
   if (cell.status === 'init') {
     opponentPlayer.gameField[x][y].status = SHIP_STATUS.MISS;
   } else if (cell.status === 'ship') {
@@ -37,31 +39,41 @@ export const attackHandler = async (
     status = SHIP_STATUS.SHOT;
 
     // Check if the ship is killed after the shot
-    const curShip = opponentPlayer.gameField[x][y].ship;
     if (isKilled(curShip, opponentPlayer.gameField)) {
       console.log('killed');
+
+      status = SHIP_STATUS.KILLED;
+      killShipHandler(
+        wsServer,
+        game.players,
+        indexPlayer,
+        opponentPlayer.gameField,
+        curShip
+      );
     }
   }
 
   // TODO Check if we have a winner
 
-  wsServer.clients.forEach((client: WebSocketWithId) => {
-    game.players.forEach((player) => {
-      if (client.id === player.index) {
-        client.send(
-          JSON.stringify({
-            type: MES_TYPES.ATTACK,
-            data: JSON.stringify({
-              position: { x, y },
-              currentPlayer: indexPlayer,
-              status,
-            }),
-            id: 0,
-          })
-        );
-      }
+  if (status !== SHIP_STATUS.KILLED) {
+    wsServer.clients.forEach((client: WebSocketWithId) => {
+      game.players.forEach((player) => {
+        if (client.id === player.index) {
+          client.send(
+            JSON.stringify({
+              type: MES_TYPES.ATTACK,
+              data: JSON.stringify({
+                position: { x, y },
+                currentPlayer: indexPlayer,
+                status,
+              }),
+              id: 0,
+            })
+          );
+        }
+      });
     });
-  });
+  }
 
   console.log(gameId, x, y, indexPlayer);
 };

@@ -1,5 +1,6 @@
 import { MES_TYPES } from '../../const';
 import { db } from '../../db/AppDb';
+import { sendResponseToAll } from '../responseHelpers';
 import { WebSocketServer } from '../types';
 
 export const updateRoomsHandler = async (
@@ -7,13 +8,5 @@ export const updateRoomsHandler = async (
 ): Promise<void> => {
   const rooms = await db.updateRooms();
 
-  wsServer.clients.forEach((client) => {
-    client.send(
-      JSON.stringify({
-        type: MES_TYPES.UPDATE_ROOM,
-        data: JSON.stringify(rooms),
-        id: 0,
-      })
-    );
-  });
+  sendResponseToAll(wsServer, MES_TYPES.UPDATE_ROOM, JSON.stringify(rooms));
 };
