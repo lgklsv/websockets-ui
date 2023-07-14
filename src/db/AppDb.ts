@@ -1,4 +1,5 @@
-import { generateEmptyGameField, generateId, pickFirstPlayer } from '../utils';
+import { generateId, pickFirstPlayer } from '../utils';
+import { generateEmptyGameField } from '../websocket/game/helpers';
 
 class AppDb implements IAppDb {
   private users: User[] = [];

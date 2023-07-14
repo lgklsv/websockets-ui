@@ -1,6 +1,6 @@
 import { db } from '../../db/AppDb';
-import { populateGameField } from '../../utils';
 import { ResReqBase, WebSocketServer } from '../types';
+import { populateGameField } from './helpers';
 import { GAME_STAGES } from './readyGameStages';
 import { startGameHandler } from './startGame';
 import { turnHandler } from './turn';
