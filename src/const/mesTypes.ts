@@ -10,4 +10,5 @@ export enum MES_TYPES {
   TURN = 'turn',
   ATTACK = 'attack',
   RANDOM_ATTACK = 'randomAttack',
+  FINISH = 'finish',
 }

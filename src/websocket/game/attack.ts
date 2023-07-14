@@ -1,7 +1,8 @@
 import { MES_TYPES, SHIP_STATUS } from '../../const';
 import { db } from '../../db/AppDb';
 import { WebSocketServer, WebSocketWithId } from '../types';
-import { isKilled } from './helpers';
+import { finishGame } from './finishGame';
+import { isKilled, isWinner } from './helpers';
 import { killShipHandler } from './killShip';
 import { turnHandler } from './turn';
 
@@ -73,7 +74,11 @@ export const attack = async (
       });
     });
   }
-  // TODO Check if we have a winner
+
+  if (isWinner(opponentGameFiled)) {
+    finishGame(wsServer, game, indexPlayer);
+    return;
+  }
 
   db.changeTurn(game.gameId);
   turnHandler(wsServer, game);
