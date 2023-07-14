@@ -15,6 +15,9 @@ export const attackHandler = async (
   const game = await db.getGameById(gameId);
   if (!game) return;
 
+  // Check if turn is on current player
+  if (game.turn !== indexPlayer) return;
+
   const opponentPlayer = game.players.find(
     (player) => player.index !== indexPlayer
   );
@@ -53,8 +56,6 @@ export const attackHandler = async (
     }
   }
 
-  // TODO Check if we have a winner
-
   if (status !== SHIP_STATUS.KILLED) {
     wsServer.clients.forEach((client: WebSocketWithId) => {
       game.players.forEach((player) => {
@@ -75,5 +76,6 @@ export const attackHandler = async (
     });
   }
 
+  // TODO Check if we have a winner
   console.log(gameId, x, y, indexPlayer);
 };
