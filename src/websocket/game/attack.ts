@@ -1,6 +1,7 @@
 import { MES_TYPES, SHIP_STATUS } from '../../const';
 import { db } from '../../db/AppDb';
 import { WebSocketServer, WebSocketWithId } from '../types';
+import { updateWinnersHandler } from '../winners';
 import { finishGame } from './finishGame';
 import { isKilled, isWinner } from './helpers';
 import { killShipHandler } from './killShip';
@@ -77,6 +78,8 @@ export const attack = async (
 
   if (isWinner(opponentGameFiled)) {
     finishGame(wsServer, game, indexPlayer);
+    await db.updateWinners(indexPlayer);
+    await updateWinnersHandler(wsServer);
     return;
   }
 

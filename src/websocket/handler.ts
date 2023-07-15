@@ -8,6 +8,7 @@ import {
   attackHandler,
   randomAttackHandler,
 } from './game';
+import { updateWinnersHandler } from './winners';
 
 export const handler = async (
   wsServer: WebSocketServer,
@@ -22,6 +23,7 @@ export const handler = async (
     switch (reqObj.type) {
       case MES_TYPES.REG:
         response = await registerUserHandler(reqObj, connectionId);
+        await updateWinnersHandler(wsServer);
         break;
       case MES_TYPES.CREATE_ROOM:
         await createRoomHandler(connectionId);

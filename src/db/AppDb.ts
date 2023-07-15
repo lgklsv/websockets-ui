@@ -5,6 +5,7 @@ class AppDb implements IAppDb {
   private users: User[] = [];
   private rooms: Room[] = [];
   private games: Game[] = [];
+  private winners: Winner[] = [];
 
   // Users
   async getUser(username: string): Promise<User | undefined> {
@@ -124,6 +125,26 @@ class AppDb implements IAppDb {
     if (!opponentPlayer) return;
 
     return opponentPlayer.gameField;
+  }
+
+  // Winners
+  async getWinners(): Promise<Winner[]> {
+    return this.winners;
+  }
+
+  async updateWinners(indexPlayer: number): Promise<void> {
+    const user = this.users.find((user) => user.index === indexPlayer);
+    if (!user) return;
+
+    const existingWinnerIdx = this.winners.findIndex(
+      (w) => w.name === user.name
+    );
+
+    if (existingWinnerIdx !== -1) {
+      this.winners[existingWinnerIdx].wins++;
+    } else {
+      this.winners.push({ name: user.name, wins: 1 });
+    }
   }
 }
 

@@ -42,6 +42,11 @@ interface Game {
   players: PlayersInGame;
 }
 
+interface Winner {
+  name: string;
+  wins: number;
+}
+
 interface IAppDb {
   getUser: (username: string) => Promise<User | undefined>;
   getUserById: (index: number) => Promise<User | undefined>;
@@ -60,4 +65,6 @@ interface IAppDb {
     gameId: number,
     curPlayerIdx: number
   ) => Promise<GameCell[][] | undefined>;
+  getWinners: () => Promise<Winner[]>;
+  updateWinners: (indexPlayer: number) => Promise<void>;
 }
