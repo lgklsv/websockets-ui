@@ -9,6 +9,7 @@ import {
   randomAttackHandler,
 } from './game';
 import { updateWinnersHandler } from './winners';
+import { botHandler } from './bot';
 
 export const handler = async (
   wsServer: WebSocketServer,
@@ -41,6 +42,9 @@ export const handler = async (
         break;
       case MES_TYPES.RANDOM_ATTACK:
         await randomAttackHandler(wsServer, reqObj);
+        break;
+      case MES_TYPES.SINGLE_PLAY:
+        await botHandler(wsServer, connectionId);
         break;
       default:
         return response;

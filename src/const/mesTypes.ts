@@ -12,4 +12,5 @@ export enum MES_TYPES {
   RANDOM_ATTACK = 'randomAttack',
   FINISH = 'finish',
   UPDATE_WINNERS = 'update_winners',
+  SINGLE_PLAY = 'single_play',
 }

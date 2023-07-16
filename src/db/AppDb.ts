@@ -1,5 +1,6 @@
 import { generateId, pickFirstPlayer } from '../utils';
 import { generateEmptyGameField } from '../websocket/game/helpers';
+import { generateBattleField } from '../websocket/game/helpers/generateBattleField';
 
 class AppDb implements IAppDb {
   private users: User[] = [];
@@ -65,12 +66,14 @@ class AppDb implements IAppDb {
   async createGame(players: Player[]): Promise<number> {
     const gameId = generateId();
     const firstPlayer = pickFirstPlayer(players);
+    const isBot = players[1].isBot;
 
     this.games.push({
       gameId,
       active: true,
-      turn: firstPlayer.index,
+      turn: isBot ? players[0].index : firstPlayer.index,
       readyStage: 'init',
+      singlePlay: isBot,
       players: [
         {
           index: players[0].index,
@@ -80,7 +83,7 @@ class AppDb implements IAppDb {
         {
           index: players[1].index,
           ships: [],
-          gameField: generateEmptyGameField(),
+          gameField: isBot ? generateBattleField() : generateEmptyGameField(),
         },
       ],
     });

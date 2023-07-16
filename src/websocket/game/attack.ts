@@ -13,15 +13,15 @@ export const attack = async (
   indexPlayer: number,
   x: number,
   y: number
-) => {
+): Promise<boolean> => {
   const game = await db.getGameById(gameId);
   if (!game) return;
 
   // Check if turn is on current player
-  if (game.turn !== indexPlayer) return;
+  if (game.turn !== indexPlayer && !game.singlePlay) return;
 
   const opponentGameFiled = await db.getOpponentGameField(gameId, indexPlayer);
-  if (!opponentGameFiled) return;
+  if (!opponentGameFiled) return false;
 
   const cell = opponentGameFiled[x][y];
   let status: ResCellStatus = SHIP_STATUS.MISS;
@@ -32,7 +32,7 @@ export const attack = async (
     cell.status === SHIP_STATUS.SHOT ||
     cell.status === SHIP_STATUS.KILLED
   )
-    return;
+    return false;
 
   const curShip = opponentGameFiled[x][y].ship;
   if (cell.status === 'init') {
@@ -43,8 +43,6 @@ export const attack = async (
 
     // Check if the ship is killed after the shot
     if (isKilled(curShip, opponentGameFiled)) {
-      console.log('killed');
-
       status = SHIP_STATUS.KILLED;
       killShipHandler(
         wsServer,
@@ -78,12 +76,16 @@ export const attack = async (
 
   if (isWinner(opponentGameFiled)) {
     finishGame(wsServer, game, indexPlayer);
-    await db.updateWinners(indexPlayer);
-    await updateWinnersHandler(wsServer);
+    if (!game.singlePlay) {
+      await db.updateWinners(indexPlayer);
+      await updateWinnersHandler(wsServer);
+    }
     return;
   }
 
-  db.changeTurn(game.gameId);
+  if (!game.singlePlay) {
+    db.changeTurn(game.gameId);
+  }
   turnHandler(wsServer, game);
-  console.log(gameId, x, y, indexPlayer);
+  return true;
 };

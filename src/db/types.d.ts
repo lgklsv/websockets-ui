@@ -4,7 +4,7 @@ interface User {
   password: string;
 }
 
-type Player = Omit<User, 'password'>;
+type Player = Omit<User, 'password'> & { isBot?: boolean };
 
 interface Room {
   roomId: number;
@@ -39,6 +39,7 @@ interface Game {
   active: boolean;
   turn: number;
   readyStage: 'init' | 'one_ready' | 'both_ready';
+  singlePlay: boolean;
   players: PlayersInGame;
 }
 

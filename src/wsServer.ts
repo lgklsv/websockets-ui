@@ -30,7 +30,6 @@ export const createWsServer = (port: number): WebSocketServer => {
     ws.on('close', async () => {
       // TODO clean up the connection
       await updateRoomsHandler(wsServer);
-
       console.log(`Client with ID ${ws.id} disconnected from websocket`);
     });
   });

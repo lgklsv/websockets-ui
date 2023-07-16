@@ -4,7 +4,6 @@ export const populateGameField = (
 ): GameCell[][] => {
   ships.forEach((ship) => {
     // Vertical
-    console.log(ship);
     if (ship.direction) {
       for (let i = 0; i < ship.length; i++) {
         gameField[ship.position.x][ship.position.y + i] = {

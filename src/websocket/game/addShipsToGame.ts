@@ -13,8 +13,6 @@ export const addShipsToGameHandler = async (
     reqBody.data
   ) as RequestAddShips;
 
-  console.log(ships);
-
   const game = await db.getGameById(gameId);
   if (!game) return;
 
@@ -29,7 +27,17 @@ export const addShipsToGameHandler = async (
     return player;
   });
 
-  console.log(updatedPlayers[0].gameField);
+  // Bot
+  if (game.singlePlay) {
+    await db.updateGameById(gameId, {
+      ...game,
+      players: updatedPlayers,
+      readyStage: 'both_ready',
+    });
+    startGameHandler(wsServer, game);
+    turnHandler(wsServer, game);
+    return;
+  }
 
   if (game.readyStage === GAME_STAGES.INIT) {
     await db.updateGameById(gameId, {
