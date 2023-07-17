@@ -12,6 +12,6 @@ export const botHandler = async (
 
   await createGame(wsServer, [
     user,
-    { index: generateId(), name: 'bot', isBot: true },
+    { index: generateId(), name: 'bot', loggedIn: true, isBot: true },
   ]);
 };

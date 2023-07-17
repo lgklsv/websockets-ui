@@ -12,7 +12,7 @@ export const registerUserHandler = async (
   try {
     await validateUserData(name, password);
 
-    await db.addUser({ name, password, index: connectionId });
+    await db.addUser({ name, password, index: connectionId, loggedIn: true });
 
     return {
       ...reqBody,

@@ -2,6 +2,7 @@ interface User {
   index: number;
   name: string;
   password: string;
+  loggedIn: boolean;
 }
 
 type Player = Omit<User, 'password'> & { isBot?: boolean };

@@ -25,6 +25,7 @@ export const handler = async (
       case MES_TYPES.REG:
         response = await registerUserHandler(reqObj, connectionId);
         await updateWinnersHandler(wsServer);
+        await updateRoomsHandler(wsServer);
         break;
       case MES_TYPES.CREATE_ROOM:
         await createRoomHandler(connectionId);

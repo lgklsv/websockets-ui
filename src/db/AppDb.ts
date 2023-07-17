@@ -34,7 +34,9 @@ class AppDb implements IAppDb {
   async createRoom(indexRoom: number, user: User): Promise<void> {
     this.rooms.push({
       roomId: indexRoom,
-      roomUsers: [{ name: user.name, index: user.index }],
+      roomUsers: [
+        { name: user.name, index: user.index, loggedIn: user.loggedIn },
+      ],
     });
   }
 
@@ -55,6 +57,7 @@ class AppDb implements IAppDb {
       this.rooms[roomIdx].roomUsers.push({
         name: user.name,
         index: user.index,
+        loggedIn: user.loggedIn,
       });
       user1 = room.roomUsers[0];
       user2 = user;
