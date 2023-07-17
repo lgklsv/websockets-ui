@@ -1,12 +1,7 @@
 import { ERROR_MES } from '../../const';
-import { db } from '../../db/AppDb';
 import { AppError } from '../../errors/AppError';
 
-export const validateUserData = async (name: string, password: string) => {
-  if (await db.getUser(name)) {
-    throw new AppError('reg', ERROR_MES.USER_EXISTS);
-  }
-
+export const validateUserData = (name: string, password: string) => {
   if (name.length < 5) {
     throw new AppError('reg', ERROR_MES.INVALID_USERNAME);
   }

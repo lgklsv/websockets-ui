@@ -3,6 +3,7 @@ import { handler } from './websocket/handler';
 import { generateId } from './utils';
 import { WebSocketServer, WebSocketWithId } from './websocket/types';
 import { updateRoomsHandler } from './websocket/rooms';
+import { db } from './db/AppDb';
 
 export const createWsServer = (port: number): WebSocketServer => {
   const wsServer = new WebSocket.Server({ port });
@@ -28,9 +29,9 @@ export const createWsServer = (port: number): WebSocketServer => {
     });
 
     ws.on('close', async () => {
-      // TODO clean up the connection
+      await db.logoutUser(ws.id);
       await updateRoomsHandler(wsServer);
-      console.log(`Client with ID ${ws.id} disconnected from websocket`);
+      console.log(`👋 Client with ID ${ws.id} disconnected from websocket`);
     });
   });
 

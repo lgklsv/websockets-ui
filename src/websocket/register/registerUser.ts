@@ -1,6 +1,7 @@
 import { db } from '../../db/AppDb';
 import { AppError } from '../../errors/AppError';
 import { ResReqBase } from '../types';
+import { validateExistingUser } from './validateExistingUser';
 import { validateUserData } from './validateUserData';
 
 export const registerUserHandler = async (
@@ -10,9 +11,25 @@ export const registerUserHandler = async (
   const { name, password } = JSON.parse(reqBody.data) as RequestReg;
 
   try {
-    await validateUserData(name, password);
+    // Basic validation
+    validateUserData(name, password);
 
-    await db.addUser({ name, password, index: connectionId, loggedIn: true });
+    const user = await db.getUser(name);
+
+    // Register user
+    if (!user) {
+      await db.addUser({
+        name,
+        password,
+        index: connectionId,
+        loggedIn: true,
+      });
+    }
+    // Login user
+    else {
+      validateExistingUser(user, password);
+      await db.loginUser(name, connectionId);
+    }
 
     return {
       ...reqBody,

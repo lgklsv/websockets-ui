@@ -17,18 +17,28 @@ class AppDb implements IAppDb {
     return this.users.find((user) => user.index === index);
   }
 
+  async loginUser(name: string, index: number): Promise<void> {
+    const userIdx = this.users.findIndex((user) => user.name === name);
+    this.users[userIdx].index = index;
+    this.users[userIdx].loggedIn = true;
+  }
+
+  async logoutUser(index: number): Promise<void> {
+    // Delete opened rooms
+    this.rooms = this.rooms.filter((room) => room.roomId !== index);
+
+    // Set logout state
+    const userIdx = this.users.findIndex((user) => user.index === index);
+    this.users[userIdx].loggedIn = false;
+  }
+
   async addUser(newUser: User) {
     this.users.push(newUser);
   }
 
+  // Rooms
   async getRoomById(index: number): Promise<Room | undefined> {
     return this.rooms.find((room) => room.roomId === index);
-  }
-
-  // Rooms
-  async updateRooms(): Promise<Room[]> {
-    this.rooms = this.rooms.filter((room) => room.roomUsers.length < 2);
-    return this.rooms;
   }
 
   async createRoom(indexRoom: number, user: User): Promise<void> {
@@ -38,6 +48,11 @@ class AppDb implements IAppDb {
         { name: user.name, index: user.index, loggedIn: user.loggedIn },
       ],
     });
+  }
+
+  async updateRooms(): Promise<Room[]> {
+    this.rooms = this.rooms.filter((room) => room.roomUsers.length < 2);
+    return this.rooms;
   }
 
   async addUserToRoom(

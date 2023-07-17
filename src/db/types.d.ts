@@ -52,6 +52,9 @@ interface Winner {
 interface IAppDb {
   getUser: (username: string) => Promise<User | undefined>;
   getUserById: (index: number) => Promise<User | undefined>;
+  addUser: (newUser: User) => Promise<void>;
+  loginUser: (name: string, index: number) => Promise<void>;
+  logoutUser: (index: number) => Promise<void>;
   updateRooms: () => Promise<Room[]>;
   getRoomById: (index: number) => Promise<Room | undefined>;
   createRoom: (indexRoom: number, user: User) => Promise<void>;
